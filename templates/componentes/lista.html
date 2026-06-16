@@ -3,13 +3,13 @@
 {% block nav_componentes %}active{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
+<div class="row mb-3 align-items-center">
   <div class="col">
-    <h2><i class="bi bi-boxes me-2"></i>Componentes Electrónicos</h2>
+    <h4 class="mb-0"><i class="bi bi-boxes me-2"></i>Componentes</h4>
   </div>
   <div class="col-auto">
-    <a href="{% url 'componentes:crear' %}" class="btn btn-primary">
-      <i class="bi bi-plus-lg me-1"></i>Nuevo componente
+    <a href="{% url 'componentes:crear' %}" class="btn btn-sm btn-primary">
+      <i class="bi bi-plus-lg me-1"></i>Nuevo
     </a>
   </div>
 </div>

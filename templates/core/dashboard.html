@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Inicio — Inventario Theory{% endblock %}
+{% block nav_inicio %}active{% endblock %}
+
+{% block content %}
+<div class="dashboard-search">
+  <p class="text-muted small mb-3">¿Qué componente estás buscando?</p>
+  <form method="get" action="{% url 'core:dashboard' %}">
+    <div class="input-group input-group-lg">
+      <span class="input-group-text bg-dark border-secondary"><i class="bi bi-search text-muted"></i></span>
+      <input type="text" name="q" class="form-control" placeholder="Buscar componente..." autofocus>
+    </div>
+  </form>
+  <div class="d-flex justify-content-center gap-3 mt-4 small">
+    <a href="{% url 'componentes:lista' %}">Ver componentes</a>
+    <span class="text-muted">·</span>
+    <a href="{% url 'placas:lista' %}">Ver placas</a>
+    <span class="text-muted">·</span>
+    <a href="{% url 'core:agregar' %}">Agregar</a>
+  </div>
+</div>
+{% endblock %}

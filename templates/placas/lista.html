@@ -3,13 +3,13 @@
 {% block nav_placas %}active{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
+<div class="row mb-3 align-items-center">
   <div class="col">
-    <h2><i class="bi bi-motherboard me-2"></i>Placas y Microcontroladores</h2>
+    <h4 class="mb-0"><i class="bi bi-motherboard me-2"></i>Placas</h4>
   </div>
   <div class="col-auto">
-    <a href="{% url 'placas:crear' %}" class="btn btn-primary">
-      <i class="bi bi-plus-lg me-1"></i>Nueva placa
+    <a href="{% url 'placas:crear' %}" class="btn btn-sm btn-primary">
+      <i class="bi bi-plus-lg me-1"></i>Nueva
     </a>
   </div>
 </div>
