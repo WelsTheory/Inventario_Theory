@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Componentes — Inventario Theory{% endblock %}
+{% block nav_componentes %}active{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <h2><i class="bi bi-boxes me-2"></i>Componentes Electrónicos</h2>
+  </div>
+  <div class="col-auto">
+    <a href="{% url 'componentes:crear' %}" class="btn btn-primary">
+      <i class="bi bi-plus-lg me-1"></i>Nuevo componente
+    </a>
+  </div>
+</div>
+
+<!-- Filtros -->
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="get" class="row g-3 align-items-end">
+      <div class="col-md-6">
+        <label class="form-label text-muted small">Buscar</label>
+        <div class="input-group">
+          <span class="input-group-text bg-dark border-secondary"><i class="bi bi-search text-muted"></i></span>
+          <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Nombre o valor...">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small">Categoría</label>
+        <select name="categoria" class="form-select">
+          <option value="">Todas</option>
+          {% for val, label in categorias %}
+            <option value="{{ val }}" {% if categoria_actual == val %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-outline-secondary">Filtrar</button>
+        {% if q or categoria_actual %}
+          <a href="{% url 'componentes:lista' %}" class="btn btn-outline-danger ms-1"><i class="bi bi-x"></i></a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Tabla -->
+{% if componentes %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr class="border-secondary">
+          <th>Nombre / Valor</th>
+          <th>Categoría</th>
+          <th>Cantidad</th>
+          <th>Ubicación</th>
+          <th>Notas</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in componentes %}
+        <tr class="border-secondary">
+          <td>
+            <div class="fw-semibold">{{ c.nombre }}</div>
+            {% if c.valor %}<div class="small text-muted">{{ c.valor }}</div>{% endif %}
+          </td>
+          <td><span class="badge bg-secondary">{{ c.get_categoria_display }}</span></td>
+          <td>
+            <span class="fw-bold {% if c.cantidad == 0 %}text-danger{% elif c.cantidad < 5 %}text-warning{% else %}text-success{% endif %}">
+              {{ c.cantidad }}
+            </span>
+          </td>
+          <td><span class="small">{{ c.ubicacion }}</span></td>
+          <td><span class="small text-muted">{{ c.notas|truncatechars:40 }}</span></td>
+          <td class="text-end">
+            <a href="{% url 'componentes:editar' c.pk %}" class="btn btn-sm btn-outline-secondary me-1">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <a href="{% url 'componentes:eliminar' c.pk %}" class="btn btn-sm btn-outline-danger">
+              <i class="bi bi-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="text-muted small mt-2">{{ componentes.count }} componente{{ componentes.count|pluralize }}</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <i class="bi bi-boxes display-1"></i>
+  <p class="mt-3">No hay componentes registrados{% if q or categoria_actual %} con esos filtros{% endif %}.</p>
+  {% if not q and not categoria_actual %}
+    <a href="{% url 'componentes:crear' %}" class="btn btn-primary">Agregar primer componente</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Eliminar {{ placa.nombre }}{% endblock %}
+{% block nav_placas %}active{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card border-danger">
+      <div class="card-header bg-danger text-white">
+        <i class="bi bi-exclamation-triangle me-2"></i>Confirmar eliminación
+      </div>
+      <div class="card-body">
+        <p>¿Seguro que quieres eliminar <strong>{{ placa.nombre }}</strong>?</p>
+        {% if placa.videos.count %}
+          <p class="text-warning small"><i class="bi bi-exclamation-circle me-1"></i>Se eliminarán también {{ placa.videos.count }} video(s) asociado(s).</p>
+        {% endif %}
+        <form method="post" class="d-flex gap-2 mt-3">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+          <a href="{% url 'placas:detalle' placa.pk %}" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

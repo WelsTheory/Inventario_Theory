@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }} — Inventario Theory{% endblock %}
+{% block nav_componentes %}active{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'componentes:lista' %}">Componentes</a></li>
+        <li class="breadcrumb-item active">{{ titulo }}</li>
+      </ol>
+    </nav>
+    <h3>{{ titulo }}</h3>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Nombre *</label>
+              {{ form.nombre }}
+              {% if form.nombre.errors %}<div class="text-danger small">{{ form.nombre.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Categoría</label>
+              {{ form.categoria }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Valor</label>
+              {{ form.valor }}
+              <div class="form-text text-muted">Ej: 10kΩ, 100µF, 5V</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Cantidad</label>
+              {{ form.cantidad }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Ubicación *</label>
+              {{ form.ubicacion }}
+              {% if form.ubicacion.errors %}<div class="text-danger small">{{ form.ubicacion.errors }}</div>{% endif %}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Notas</label>
+              {{ form.notas }}
+            </div>
+          </div>
+          <hr>
+          <div class="d-flex gap-2 flex-wrap">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg me-1"></i>Guardar
+            </button>
+            {% if not componente %}
+            <button type="submit" name="agregar_otro" value="1" class="btn btn-outline-secondary">
+              <i class="bi bi-plus-lg me-1"></i>Guardar y agregar otro
+            </button>
+            {% endif %}
+            <a href="{% url 'componentes:lista' %}" class="btn btn-outline-secondary">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

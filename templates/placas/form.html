@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }} — Inventario Theory{% endblock %}
+{% block nav_placas %}active{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'placas:lista' %}">Placas</a></li>
+        {% if placa %}<li class="breadcrumb-item"><a href="{% url 'placas:detalle' placa.pk %}">{{ placa.nombre }}</a></li>{% endif %}
+        <li class="breadcrumb-item active">{{ titulo }}</li>
+      </ol>
+    </nav>
+    <h3>{{ titulo }}</h3>
+  </div>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">Información general</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Nombre *</label>
+              {{ form.nombre }}
+              {% if form.nombre.errors %}<div class="text-danger small">{{ form.nombre.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Tipo</label>
+              {{ form.tipo }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Descripción</label>
+              {{ form.descripcion }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">Ubicación y enlaces</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Ubicación física</label>
+              {{ form.ubicacion_fisica }}
+              <div class="form-text text-muted">Ej: Cajón 2, Caja azul</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Directorio en PC</label>
+              {{ form.directorio_pc }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Repositorio</label>
+              {{ form.repo_url }}
+              {% if form.repo_url.errors %}<div class="text-danger small">{{ form.repo_url.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Videos -->
+      <div class="card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Videos / Tutoriales</span>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="add-video">
+            <i class="bi bi-plus-lg me-1"></i>Agregar video
+          </button>
+        </div>
+        <div class="card-body">
+          {{ formset.management_form }}
+          <div id="video-forms">
+            {% for vform in formset %}
+            <div class="video-form border border-secondary rounded p-3 mb-3">
+              <div class="row g-2">
+                <div class="col-12">
+                  <label class="form-label small">Título</label>
+                  {{ vform.titulo }}
+                  {{ vform.id }}
+                </div>
+                <div class="col-12">
+                  <label class="form-label small">URL del video</label>
+                  {{ vform.url }}
+                  {% if vform.url.errors %}<div class="text-danger small">{{ vform.url.errors }}</div>{% endif %}
+                </div>
+                <div class="col-12">
+                  <label class="form-label small">Descripción corta (opcional)</label>
+                  {{ vform.descripcion }}
+                </div>
+                {% if vform.instance.pk %}
+                <div class="col-12">
+                  <div class="form-check">
+                    {{ vform.DELETE }}
+                    <label class="form-check-label text-danger small" for="{{ vform.DELETE.id_for_label }}">Eliminar este video</label>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">Estado y imagen</div>
+        <div class="card-body">
+          <div class="form-check form-switch mb-3">
+            {{ form.curso_finalizado }}
+            <label class="form-check-label" for="{{ form.curso_finalizado.id_for_label }}">Curso finalizado</label>
+          </div>
+          <label class="form-label">Imagen de la placa</label>
+          {{ form.imagen }}
+          {% if placa and placa.imagen %}
+            <div class="mt-2">
+              <img src="{{ placa.imagen.url }}" alt="Actual" class="img-fluid rounded" style="max-height:120px;">
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card mt-3">
+        <div class="card-body d-grid gap-2">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg me-1"></i>Guardar
+          </button>
+          {% if placa %}
+            <a href="{% url 'placas:detalle' placa.pk %}" class="btn btn-outline-secondary">Cancelar</a>
+          {% else %}
+            <a href="{% url 'placas:lista' %}" class="btn btn-outline-secondary">Cancelar</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const totalForms = document.getElementById('id_videos-TOTAL_FORMS');
+  document.getElementById('add-video').addEventListener('click', () => {
+    const forms = document.querySelectorAll('.video-form');
+    const count = forms.length;
+    const template = forms[0].cloneNode(true);
+    template.querySelectorAll('input, textarea').forEach(el => {
+      el.name = el.name.replace(/-\d+-/, `-${count}-`);
+      el.id = el.id.replace(/-\d+-/, `-${count}-`);
+      el.value = '';
+    });
+    template.querySelectorAll('label').forEach(el => {
+      if (el.htmlFor) el.htmlFor = el.htmlFor.replace(/-\d+-/, `-${count}-`);
+    });
+    document.getElementById('video-forms').appendChild(template);
+    totalForms.value = count + 1;
+  });
+</script>
+{% endblock %}
