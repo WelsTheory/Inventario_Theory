@@ -1,8 +1,19 @@
 # Inventario Theory
 
-Aplicación web local para inventariar placas de desarrollo electrónicas (Arduino, ESP32, Raspberry Pi, etc.) y componentes electrónicos (resistencias, capacitores, sensores, etc.).
+Aplicación web local para inventariar **placas de desarrollo electrónicas** (Arduino, ESP32, Raspberry Pi, etc.) y **componentes electrónicos** (resistencias, capacitores, sensores, etc.).
 
 Construida con Django 5 y una UI dark mode basada en Bootstrap 5.
+
+---
+
+## Caracteristicas
+
+- **Placas**: registra nombre, tipo, ubicacion fisica, directorio en PC, repositorio y videos de referencia
+- **Componentes**: registra nombre, categoria, valor, cantidad y ubicacion en el taller
+- **Busqueda y filtros** en ambos modulos
+- **Imagenes**: sube fotos de tus placas
+- **Admin de Django** disponible en `/admin/`
+- **Acceso por Tailscale** detectado automaticamente al iniciar
 
 ---
 
@@ -52,7 +63,7 @@ python3 -c "from django.core.management.utils import get_random_secret_key; prin
 Pega el resultado en `.env`:
 
 ```env
-SECRET_KEY=tu-clave-generada-aqui
+SECRET_KEY='tu-clave-generada-aqui'
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
 ```
@@ -82,7 +93,7 @@ python3 manage.py createsuperuser
 bash start.sh
 ```
 
-El script activa el entorno virtual (si existe), carga el `.env`, aplica migraciones y levanta el servidor.
+El script activa el entorno virtual (si existe), carga el `.env`, instala/actualiza dependencias, aplica migraciones y levanta el servidor.
 
 ### O arranque manual
 
