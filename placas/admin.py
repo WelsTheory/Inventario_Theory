@@ -9,7 +9,7 @@ class VideoInline(admin.TabularInline):
 
 @admin.register(Placa)
 class PlacaAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'tipo', 'ubicacion_fisica', 'curso_finalizado', 'fecha_creacion']
-    list_filter = ['tipo', 'curso_finalizado']
+    list_display = ['nombre', 'tipo', 'ubicacion_fisica', 'fecha_creacion']
+    list_filter = ['tipo']
     search_fields = ['nombre', 'descripcion']
     inlines = [VideoInline]

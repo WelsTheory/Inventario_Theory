@@ -24,9 +24,9 @@ def placa_lista(request):
     if tipo:
         qs = qs.filter(tipo=tipo)
     if estado == 'finalizado':
-        qs = qs.filter(curso_finalizado=True)
+        qs = qs.filter(videos__isnull=False).exclude(videos__finalizado=False).distinct()
     elif estado == 'en_curso':
-        qs = qs.filter(curso_finalizado=False)
+        qs = qs.filter(videos__finalizado=False).distinct()
 
     context = {
         'placas': qs,

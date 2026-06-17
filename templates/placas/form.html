@@ -91,6 +91,12 @@
                   <label class="form-label small">Descripción corta (opcional)</label>
                   {{ vform.descripcion }}
                 </div>
+                <div class="col-12">
+                  <div class="form-check form-switch">
+                    {{ vform.finalizado }}
+                    <label class="form-check-label small" for="{{ vform.finalizado.id_for_label }}">Curso finalizado</label>
+                  </div>
+                </div>
                 {% if vform.instance.pk %}
                 <div class="col-12">
                   <div class="form-check">
@@ -109,12 +115,8 @@
 
     <div class="col-lg-4">
       <div class="card">
-        <div class="card-header">Estado y imagen</div>
+        <div class="card-header">Imagen</div>
         <div class="card-body">
-          <div class="form-check form-switch mb-3">
-            {{ form.curso_finalizado }}
-            <label class="form-check-label" for="{{ form.curso_finalizado.id_for_label }}">Curso finalizado</label>
-          </div>
           <label class="form-label">Imagen de la placa</label>
           {{ form.imagen }}
           {% if placa and placa.imagen %}
